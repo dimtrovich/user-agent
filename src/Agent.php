@@ -1,8 +1,17 @@
 <?php
 
-namespace Asika\Agent;
+/**
+ * This file is part of Dimtrovich UserAgent Detector.
+ *
+ * (c) 2025 Dimitri Sitchet Tomkeu <devcode.dst@gmail.com>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
 
-use BadMethodCallException;
+namespace Dimtrovich\UserAgent;
+
+use Closure;
 use Detection\Exception\MobileDetectException;
 use Detection\MobileDetect;
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
@@ -22,7 +31,6 @@ class Agent extends MobileDetect
 
     /**
      * List of desktop devices.
-     * @var array
      */
     protected static array $desktopDevices = [
         'Macintosh' => 'Macintosh',
@@ -30,67 +38,61 @@ class Agent extends MobileDetect
 
     /**
      * List of additional operating systems.
-     * @var array
      */
     protected static array $additionalOperatingSystems = [
-        'Windows' => 'Windows',
+        'Windows'    => 'Windows',
         'Windows NT' => 'Windows NT',
-        'macOS' => 'Mac OS X',
-        'Debian' => 'Debian',
-        'Ubuntu' => 'Ubuntu',
-        'Macintosh' => 'PPC',
-        'OpenBSD' => 'OpenBSD',
-        'Linux' => 'Linux',
-        'ChromeOS' => 'CrOS',
+        'macOS'      => 'Mac OS X',
+        'Debian'     => 'Debian',
+        'Ubuntu'     => 'Ubuntu',
+        'Macintosh'  => 'PPC',
+        'OpenBSD'    => 'OpenBSD',
+        'Linux'      => 'Linux',
+        'ChromeOS'   => 'CrOS',
     ];
 
     /**
      * List of additional browsers.
-     * @var array
      */
     protected static array $additionalBrowsers = [
         'Opera Mini' => 'Opera Mini',
-        'Opera' => 'Opera|OPR',
-        'Edge' => 'Edge|Edg',
-        'Coc Coc' => 'coc_coc_browser',
-        'UCBrowser' => 'UCBrowser',
-        'Vivaldi' => 'Vivaldi',
-        'Chrome' => 'Chrome',
-        'Firefox' => 'Firefox',
-        'Safari' => 'Safari',
-        'IE' => 'MSIE|IEMobile|MSIEMobile|Trident/[.0-9]+',
-        'Netscape' => 'Netscape',
-        'Mozilla' => 'Mozilla',
-        'WeChat' => 'MicroMessenger',
+        'Opera'      => 'Opera|OPR',
+        'Edge'       => 'Edge|Edg',
+        'Coc Coc'    => 'coc_coc_browser',
+        'UCBrowser'  => 'UCBrowser',
+        'Vivaldi'    => 'Vivaldi',
+        'Chrome'     => 'Chrome',
+        'Firefox'    => 'Firefox',
+        'Safari'     => 'Safari',
+        'IE'         => 'MSIE|IEMobile|MSIEMobile|Trident/[.0-9]+',
+        'Netscape'   => 'Netscape',
+        'Mozilla'    => 'Mozilla',
+        'WeChat'     => 'MicroMessenger',
     ];
 
     /**
      * List of additional properties.
-     * @var array
      */
     protected static array $additionalProperties = [
         // Operating systems
-        'Windows' => 'Windows NT [VER]',
-        'Windows NT' => 'Windows NT [VER]',
-        'macOS' => 'OS X [VER]',
+        'Windows'      => 'Windows NT [VER]',
+        'Windows NT'   => 'Windows NT [VER]',
+        'macOS'        => 'OS X [VER]',
         'BlackBerryOS' => ['BlackBerry[\w]+/[VER]', 'BlackBerry.*Version/[VER]', 'Version/[VER]'],
-        'AndroidOS' => 'Android [VER]',
-        'ChromeOS' => 'CrOS x86_64 [VER]',
+        'AndroidOS'    => 'Android [VER]',
+        'ChromeOS'     => 'CrOS x86_64 [VER]',
 
         // Browsers
         'Opera Mini' => 'Opera Mini/[VER]',
-        'Opera' => [' OPR/[VER]', 'Opera Mini/[VER]', 'Version/[VER]', 'Opera [VER]'],
-        'Netscape' => 'Netscape/[VER]',
-        'Mozilla' => 'rv:[VER]',
-        'IE' => ['IEMobile/[VER];', 'IEMobile [VER]', 'MSIE [VER];', 'rv:[VER]'],
-        'Edge' => ['Edge/[VER]', 'Edg/[VER]'],
-        'Vivaldi' => 'Vivaldi/[VER]',
-        'Coc Coc' => 'coc_coc_browser/[VER]',
+        'Opera'      => [' OPR/[VER]', 'Opera Mini/[VER]', 'Version/[VER]', 'Opera [VER]'],
+        'Netscape'   => 'Netscape/[VER]',
+        'Mozilla'    => 'rv:[VER]',
+        'IE'         => ['IEMobile/[VER];', 'IEMobile [VER]', 'MSIE [VER];', 'rv:[VER]'],
+        'Edge'       => ['Edge/[VER]', 'Edg/[VER]'],
+        'Vivaldi'    => 'Vivaldi/[VER]',
+        'Coc Coc'    => 'coc_coc_browser/[VER]',
     ];
 
-    /**
-     * @var CrawlerDetect
-     */
     protected static CrawlerDetect $crawlerDetect;
 
     protected ?array $temporaryHttpHeaders = null;
@@ -99,7 +101,7 @@ class Agent extends MobileDetect
         ?array $httpHeaders = [],
         ?string $userAgent = null,
         ?CacheInterface $cache = null,
-        array $config = []
+        array $config = [],
     ) {
         parent::__construct($cache, $config);
 
@@ -116,7 +118,7 @@ class Agent extends MobileDetect
     {
         static $rules;
 
-        if (!$rules) {
+        if (! $rules) {
             $rules = static::mergeRules(
                 static::$desktopDevices, // NEW
                 static::$phoneDevices,
@@ -125,16 +127,13 @@ class Agent extends MobileDetect
                 static::$additionalOperatingSystems, // NEW
                 static::$browsers,
                 static::$additionalBrowsers, // NEW
-//                static::$utilities
+                //                static::$utilities
             );
         }
 
         return $rules;
     }
 
-    /**
-     * @return CrawlerDetect
-     */
     public function getCrawlerDetect(): CrawlerDetect
     {
         return static::$crawlerDetect ??= new CrawlerDetect();
@@ -144,7 +143,7 @@ class Agent extends MobileDetect
     {
         return static::mergeRules(
             static::$additionalBrowsers,
-            static::$browsers
+            static::$browsers,
         );
     }
 
@@ -152,7 +151,7 @@ class Agent extends MobileDetect
     {
         return static::mergeRules(
             static::$operatingSystems,
-            static::$additionalOperatingSystems
+            static::$additionalOperatingSystems,
         );
     }
 
@@ -160,7 +159,7 @@ class Agent extends MobileDetect
     {
         return static::mergeRules(
             static::$operatingSystems,
-            static::$additionalOperatingSystems
+            static::$additionalOperatingSystems,
         );
     }
 
@@ -173,16 +172,12 @@ class Agent extends MobileDetect
     {
         return static::mergeRules(
             static::$additionalProperties,
-            static::$properties
+            static::$properties,
         );
     }
 
     /**
      * Get accept languages.
-     *
-     * @param  string|null  $acceptLanguage
-     *
-     * @return array
      */
     public function languages(?string $acceptLanguage = null): array
     {
@@ -190,7 +185,7 @@ class Agent extends MobileDetect
             $acceptLanguage = $this->getHttpHeader('HTTP_ACCEPT_LANGUAGE');
         }
 
-        if (!$acceptLanguage) {
+        if (! $acceptLanguage) {
             return [];
         }
 
@@ -198,7 +193,7 @@ class Agent extends MobileDetect
 
         // Parse accept language string.
         foreach (explode(',', $acceptLanguage) as $piece) {
-            $parts = explode(';', $piece);
+            $parts    = explode(';', $piece);
             $language = strtolower($parts[0]);
             $priority = empty($parts[1]) ? 1. : (float) str_replace('q=', '', $parts[1]);
 
@@ -213,11 +208,6 @@ class Agent extends MobileDetect
 
     /**
      * Match a detection rule and return the matched key.
-     *
-     * @param  array        $rules
-     * @param  string|null  $userAgent
-     *
-     * @return string|bool
      */
     protected function findDetectionRulesAgainstUA(array $rules, ?string $userAgent = null): bool|string
     {
@@ -254,22 +244,14 @@ class Agent extends MobileDetect
 
     /**
      * Get the browser name.
-     *
-     * @param  string|null  $userAgent
-     *
-     * @return string|bool
      */
-    public function browser(string|null $userAgent = null): bool|string
+    public function browser(?string $userAgent = null): bool|string
     {
         return $this->findDetectionRulesAgainstUA(static::getBrowsers(), $userAgent);
     }
 
     /**
      * Get the platform name.
-     *
-     * @param  string|null  $userAgent
-     *
-     * @return string|bool
      */
     public function platform(?string $userAgent = null): bool|string
     {
@@ -278,10 +260,6 @@ class Agent extends MobileDetect
 
     /**
      * Get the device name.
-     *
-     * @param  string|null  $userAgent
-     *
-     * @return string|bool
      */
     public function device(?string $userAgent = null): bool|string
     {
@@ -297,10 +275,9 @@ class Agent extends MobileDetect
     /**
      * Check if the device is a desktop computer.
      *
-     * @param  string|null  $userAgent    deprecated
-     * @param  array|null   $httpHeaders  deprecated
+     * @param string|null $userAgent   deprecated
+     * @param array|null  $httpHeaders deprecated
      *
-     * @return bool
      * @throws MobileDetectException
      */
     public function isDesktop(?string $userAgent = null, ?array $httpHeaders = null): bool
@@ -317,10 +294,10 @@ class Agent extends MobileDetect
                     return true;
                 }
 
-                return !$this->isMobile($userAgent, $httpHeaders)
-                    && !$this->isTablet($userAgent, $httpHeaders)
-                    && !$this->isRobot($userAgent);
-            }
+                return ! $this->isMobile($userAgent, $httpHeaders)
+                    && ! $this->isTablet($userAgent, $httpHeaders)
+                    && ! $this->isRobot($userAgent);
+            },
         );
     }
 
@@ -329,7 +306,7 @@ class Agent extends MobileDetect
         return $this->overrideUAAndHeaders(
             $userAgent,
             $httpHeaders,
-            fn() => parent::isMobile()
+            fn () => parent::isMobile(),
         );
     }
 
@@ -338,30 +315,25 @@ class Agent extends MobileDetect
         return $this->overrideUAAndHeaders(
             $userAgent,
             $httpHeaders,
-            fn() => parent::isTablet()
+            fn () => parent::isTablet(),
         );
     }
 
     /**
      * Check if the device is a mobile phone.
      *
-     * @param  string|null  $userAgent    deprecated
-     * @param  array|null   $httpHeaders  deprecated
+     * @param string|null $userAgent   deprecated
+     * @param array|null  $httpHeaders deprecated
      *
-     * @return bool
      * @throws MobileDetectException
      */
     public function isPhone(?string $userAgent = null, ?array $httpHeaders = null): bool
     {
-        return $this->isMobile($userAgent, $httpHeaders) && !$this->isTablet($userAgent, $httpHeaders);
+        return $this->isMobile($userAgent, $httpHeaders) && ! $this->isTablet($userAgent, $httpHeaders);
     }
 
     /**
      * Get the robot name.
-     *
-     * @param  string|null  $userAgent
-     *
-     * @return string|bool
      */
     public function robot(?string $userAgent = null): bool|string
     {
@@ -374,10 +346,6 @@ class Agent extends MobileDetect
 
     /**
      * Check if device is a robot.
-     *
-     * @param  string|null  $userAgent
-     *
-     * @return bool
      */
     public function isRobot(?string $userAgent = null): bool
     {
@@ -387,34 +355,30 @@ class Agent extends MobileDetect
     /**
      * Get the device type
      *
-     * @param  string|null  $userAgent
-     * @param  array|null   $httpHeaders
-     *
-     * @return string
      * @throws MobileDetectException
      */
     public function deviceType(?string $userAgent = null, ?array $httpHeaders = null): string
     {
         if ($this->isDesktop($userAgent, $httpHeaders)) {
-            return "desktop";
+            return 'desktop';
         }
 
         if ($this->isPhone($userAgent, $httpHeaders)) {
-            return "phone";
+            return 'phone';
         }
 
         if ($this->isTablet($userAgent, $httpHeaders)) {
-            return "tablet";
+            return 'tablet';
         }
 
         if ($this->isRobot($userAgent)) {
-            return "robot";
+            return 'robot';
         }
 
-        return "other";
+        return 'other';
     }
 
-    public function version(string $propertyName, string $type = self::VERSION_TYPE_STRING): float|bool|string
+    public function version(string $propertyName, string $type = self::VERSION_TYPE_STRING): bool|float|string
     {
         if (empty($propertyName)) {
             return false;
@@ -435,7 +399,7 @@ class Agent extends MobileDetect
 
             foreach ($properties[$propertyName] as $propertyMatchString) {
                 if (is_array($propertyMatchString)) {
-                    $propertyMatchString = implode("|", $propertyMatchString);
+                    $propertyMatchString = implode('|', $propertyMatchString);
                 }
 
                 $propertyPattern = str_replace('[VER]', self::VERSION_REGEX, $propertyMatchString);
@@ -444,9 +408,7 @@ class Agent extends MobileDetect
                 preg_match(sprintf('#%s#is', $propertyPattern), $this->userAgent, $match);
 
                 if (false === empty($match[1])) {
-                    $version = ($type === self::VERSION_TYPE_FLOAT ? $this->prepareVersionNo($match[1]) : $match[1]);
-
-                    return $version;
+                    return ($type === self::VERSION_TYPE_FLOAT ? $this->prepareVersionNo($match[1]) : $match[1]);
                 }
             }
         }
@@ -457,9 +419,7 @@ class Agent extends MobileDetect
     /**
      * Merge multiple rules into one array.
      *
-     * @param  array  $all
-     *
-     * @return array
+     * @param array $all
      */
     protected static function mergeRules(...$all): array
     {
@@ -483,7 +443,7 @@ class Agent extends MobileDetect
     protected function overrideUAAndHeaders(
         ?string $userAgent,
         ?array $temporaryHttpHeaders,
-        \Closure $callback
+        Closure $callback,
     ) {
         $ua = $this->userAgent;
 
@@ -506,7 +466,7 @@ class Agent extends MobileDetect
     {
         if ($this->temporaryHttpHeaders !== null) {
             // are we using PHP-flavored headers?
-            if (!str_contains($header, '_')) {
+            if (! str_contains($header, '_')) {
                 $header = str_replace('-', '_', $header);
                 $header = strtoupper($header);
             }
@@ -514,10 +474,11 @@ class Agent extends MobileDetect
             // test the alternate, too
             $altHeader = 'HTTP_' . $header;
 
-            //Test both the regular and the HTTP_ prefix
+            // Test both the regular and the HTTP_ prefix
             if (isset($this->temporaryHttpHeaders[$header])) {
                 return $this->temporaryHttpHeaders[$header];
-            } elseif (isset($this->temporaryHttpHeaders[$altHeader])) {
+            }
+            if (isset($this->temporaryHttpHeaders[$altHeader])) {
                 return $this->temporaryHttpHeaders[$altHeader];
             }
 
@@ -538,7 +499,7 @@ class Agent extends MobileDetect
         if (false === empty($_rules[$ruleName])) {
             $regexString = $_rules[$ruleName];
             if (is_array($_rules[$ruleName])) {
-                $regexString = implode("|", $_rules[$ruleName]);
+                $regexString = implode('|', $_rules[$ruleName]);
             }
             $result = $this->match($regexString, $this->getUserAgent());
         }

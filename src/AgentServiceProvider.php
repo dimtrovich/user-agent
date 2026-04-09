@@ -1,6 +1,15 @@
 <?php
 
-namespace Asika\Agent;
+/**
+ * This file is part of Dimtrovich UserAgent Detector.
+ *
+ * (c) 2025 Dimitri Sitchet Tomkeu <devcode.dst@gmail.com>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
+namespace Dimtrovich\UserAgent;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -18,9 +27,7 @@ class AgentServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('agent', function ($app) {
-            return new Agent($app['request']->server());
-        });
+        $this->app->singleton('agent', static fn ($app) => new Agent($app['request']->server()));
 
         $this->app->alias('agent', Agent::class);
     }

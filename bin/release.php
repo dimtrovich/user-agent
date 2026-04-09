@@ -1,14 +1,17 @@
 <?php
+
 /**
- * Part of cli project.
+ * This file is part of Dimtrovich UserAgent Detector.
  *
- * @copyright  Copyright (C) 2019 ${ORGANIZATION}.
- * @license    __LICENSE__
+ * (c) 2025 Dimitri Sitchet Tomkeu <devcode.dst@gmail.com>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 // phpcs:disable
 
-use Asika\SimpleConsole\Console;
+use Dimtrovich\SimpleConsole\Console;
 
 include_once __DIR__ . '/Console.php';
 
@@ -16,31 +19,29 @@ class Build extends Console
 {
     /**
      * Property help.
-     *
-     * @var  string
      */
-    protected $help = <<<HELP
-[Usage] php release.php <version> <next_version>
+    protected string $help = <<<'HELP'
+        [Usage] php release.php <version> <next_version>
 
-[Options]
-    h | help   Show help information
-    v          Show more debug information.
-    --dry-run  Dry run without git push or commit.
-HELP;
+        [Options]
+            h | help   Show help information
+            v          Show more debug information.
+            --dry-run  Dry run without git push or commit.
+        HELP;
 
     /**
      * doExecute
      *
-     * @return  bool|mixed
+     * @return bool|mixed
      *
      * @since  __DEPLOY_VERSION__
      */
     protected function doExecute()
     {
         $currentVersion = trim(file_get_contents(__DIR__ . '/../VERSION'));
-        $targetVersion = $this->getArgument(0);
+        $targetVersion  = $this->getArgument(0);
 
-        if (!$targetVersion) {
+        if (! $targetVersion) {
             $targetVersion = static::versionPlus($currentVersion, 1);
         }
 
@@ -60,11 +61,7 @@ HELP;
     /**
      * writeVersion
      *
-     * @param string $version
-     *
-     * @return  bool|int
-     *
-     * @since  __DEPLOY_VERSION__
+     * @return bool|int
      */
     protected static function writeVersion(string $version)
     {
@@ -73,10 +70,6 @@ HELP;
 
     /**
      * versionFile
-     *
-     * @return  string
-     *
-     * @since  __DEPLOY_VERSION__
      */
     protected static function versionFile(): string
     {
@@ -85,14 +78,6 @@ HELP;
 
     /**
      * versionPlus
-     *
-     * @param string $version
-     * @param int    $offset
-     * @param string $suffix
-     *
-     * @return  string
-     *
-     * @since  __DEPLOY_VERSION__
      */
     protected static function versionPlus(string $version, int $offset, string $suffix = ''): string
     {
@@ -100,7 +85,7 @@ HELP;
 
         $numbers = explode('.', $version);
 
-        if (!isset($numbers[2])) {
+        if (! isset($numbers[2])) {
             $numbers[2] = 0;
         }
 
@@ -122,15 +107,13 @@ HELP;
     /**
      * exec
      *
-     * @param   string $command
-     *
-     * @return  static
+     * @return static
      */
-    protected function exec($command)
+    protected function exec(string $command)
     {
         $this->out('>> ' . $command);
 
-        if (!$this->getOption('dry-run')) {
+        if (! $this->getOption('dry-run')) {
             system($command);
         }
 

@@ -1,71 +1,65 @@
 <?php
+
 /**
- * Part of Simple Console project.
+ * This file is part of Dimtrovich UserAgent Detector.
  *
- * @copyright  Copyright (C) 2017 Simon Asika.
- * @license    MIT
+ * (c) 2025 Dimitri Sitchet Tomkeu <devcode.dst@gmail.com>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
-namespace Asika\SimpleConsole;
+namespace Dimtrovich\SimpleConsole;
+
+use Closure;
+use LogicException;
+use RuntimeException;
+use Throwable;
 
 /**
  * The Console class.
  *
- * @since  1.0
+ * @credit  Copyright (C) 2017 Simon Asika.
  */
 class Console
 {
     /**
      * Property executable.
-     *
-     * @var  string
      */
-    protected $executable;
+    protected string $executable;
 
     /**
      * Property args.
-     *
-     * @var  array
      */
-    protected $args = array();
+    protected array $args = [];
 
     /**
      * Property options.
-     *
-     * @var  array
      */
-    protected $options = array();
+    protected array $options = [];
 
     /**
      * Property help.
-     *
-     * @var  string
      */
-    protected $help = '';
+    protected string $help = '';
 
     /**
      * Property helpIptions.
-     *
-     * @var  array
      */
-    protected $helpOptions = array('h', 'help');
+    protected array $helpOptions = ['h', 'help'];
 
     /**
      * Property booleanMapping.
-     *
-     * @var  array
      */
-    protected $booleanMapping = array(
-        0 => array('n', 'no', 'false', 0, '0', true),
-        1 => array('y', 'yes', 'true', 1, '1', false, null)
-    );
+    protected array $booleanMapping = [
+        0 => ['n', 'no', 'false', 0, '0', true],
+        1 => ['y', 'yes', 'true', 1, '1', false, null],
+    ];
 
     /**
      * CliInput constructor.
-     *
-     * @param array $argv
      */
-    public function __construct($argv = null)
+    public function __construct(?array $argv = null)
     {
         $this->parseArgv($argv ?: $_SERVER['argv']);
 
@@ -74,22 +68,16 @@ class Console
 
     /**
      * init
-     *
-     * @return  void
      */
-    protected function init()
+    protected function init(): void
     {
         // Override if necessary
     }
 
     /**
      * execute
-     *
-     * @param \Closure|null $callback
-     *
-     * @return  int
      */
-    public function execute(\Closure $callback = null)
+    public function execute(?Closure $callback = null): int
     {
         try {
             if ($this->getOption($this->helpOptions)) {
@@ -99,17 +87,12 @@ class Console
             }
 
             if ($callback) {
-                if (PHP_VERSION_ID >= 50400) {
-                    $callback = $callback->bindTo($this);
-                }
-
-                $result = call_user_func($callback, $this);
+                $callback = $callback->bindTo($this);
+                $result   = $callback($this);
             } else {
                 $result = $this->doExecute();
             }
-        } catch (\Exception $e) {
-            $result = $this->handleException($e);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $result = $this->handleException($e);
         }
 
@@ -126,10 +109,8 @@ class Console
 
     /**
      * doExecute
-     *
-     * @return  mixed
      */
-    protected function doExecute()
+    protected function doExecute(): mixed
     {
         // Please override this method.
         return 0;
@@ -137,41 +118,31 @@ class Console
 
     /**
      * delegate
-     *
-     * @param string $method
-     *
-     * @return  mixed
      */
-    protected function delegate($method)
+    protected function delegate(string $method): mixed
     {
         $args = func_get_args();
         array_shift($args);
 
-        if (!is_callable(array($this, $method))) {
-            throw new \LogicException(sprintf('Method: %s not found', $method));
+        if (! is_callable([$this, $method])) {
+            throw new LogicException(sprintf('Method: %s not found', $method));
         }
 
-        return call_user_func_array(array($this, $method), $args);
+        return call_user_func_array([$this, $method], $args);
     }
 
     /**
      * getHelp
-     *
-     * @return  string
      */
-    protected function getHelp()
+    protected function getHelp(): string
     {
         return trim($this->help);
     }
 
     /**
      * handleException
-     *
-     * @param \Exception|\Throwable $e
-     *
-     * @return  int
      */
-    protected function handleException($e)
+    protected function handleException(Throwable $e): int
     {
         $v = $this->getOption('v');
 
@@ -195,30 +166,18 @@ class Console
 
     /**
      * getArgument
-     *
-     * @param int   $offset
-     * @param mixed $default
-     *
-     * @return  mixed|null
      */
-    public function getArgument($offset, $default = null)
+    public function getArgument(int $offset, mixed $default = null): mixed
     {
-        if (!isset($this->args[$offset])) {
-            return $default;
-        }
-
-        return $this->args[$offset];
+        return $this->args[$offset] ?? $default;
     }
 
     /**
      * setArgument
      *
-     * @param int   $offset
-     * @param mixed $value
-     *
-     * @return  static
+     * @return static
      */
-    public function setArgument($offset, $value)
+    public function setArgument(int $offset, mixed $value)
     {
         $this->args[$offset] = $value;
 
@@ -228,12 +187,11 @@ class Console
     /**
      * getOption
      *
-     * @param string|array $name
-     * @param mixed        $default
+     * @param array|string $name
      *
-     * @return  mixed|null
+     * @return mixed|null
      */
-    public function getOption($name, $default = null)
+    public function getOption($name, mixed $default = null)
     {
         $name = (array) $name;
 
@@ -249,12 +207,11 @@ class Console
     /**
      * setOption
      *
-     * @param string|array $name
-     * @param mixed        $value
+     * @param array|string $name
      *
-     * @return  static
+     * @return static
      */
-    public function setOption($name, $value)
+    public function setOption($name, mixed $value)
     {
         $name = (array) $name;
 
@@ -268,12 +225,9 @@ class Console
     /**
      * out
      *
-     * @param   string  $text
-     * @param   boolean $nl
-     *
-     * @return  static
+     * @return static
      */
-    public function out($text = null, $nl = true)
+    public function out(?string $text = null, bool $nl = true)
     {
         fwrite(STDOUT, $text . ($nl ? "\n" : ''));
 
@@ -283,12 +237,9 @@ class Console
     /**
      * err
      *
-     * @param   string  $text
-     * @param   boolean $nl
-     *
-     * @return  static
+     * @return static
      */
-    public function err($text = null, $nl = true)
+    public function err(?string $text = null, bool $nl = true)
     {
         fwrite(STDERR, $text . ($nl ? "\n" : ''));
 
@@ -297,13 +248,8 @@ class Console
 
     /**
      * in
-     *
-     * @param string $ask
-     * @param mixed  $default
-     *
-     * @return  string
      */
-    public function in($ask = '', $default = null, $bool = false)
+    public function in(string $ask = '', mixed $default = null, bool $bool = false): string
     {
         $this->out($ask, false);
 
@@ -320,14 +266,10 @@ class Console
 
     /**
      * mapBoolean
-     *
-     * @param string $in
-     *
-     * @return  bool
      */
-    public function mapBoolean($in)
+    public function mapBoolean(string $in): ?bool
     {
-        $in = strtolower((string) $in);
+        $in = strtolower($in);
 
         if (in_array($in, $this->booleanMapping[0], true)) {
             return false;
@@ -343,11 +285,9 @@ class Console
     /**
      * exec
      *
-     * @param   string $command
-     *
-     * @return  static
+     * @return static
      */
-    protected function exec($command)
+    protected function exec(string $command)
     {
         $this->out('>> ' . $command);
 
@@ -358,23 +298,19 @@ class Console
 
     /**
      * parseArgv
-     *
-     * @param array $argv
-     *
-     * @return  void
      */
-    protected function parseArgv($argv)
+    protected function parseArgv(array $argv): void
     {
         $this->executable = array_shift($argv);
-        $key = null;
+        $key              = null;
 
-        $out = array();
+        $out = [];
 
         for ($i = 0, $j = count($argv); $i < $j; $i++) {
             $arg = $argv[$i];
-            
+
             // --foo --bar=baz
-            if (0 === strpos($arg, '--')) {
+            if (str_starts_with($arg, '--')) {
                 $eqPos = strpos($arg, '=');
 
                 // --foo
@@ -386,7 +322,7 @@ class Console
                         $value = $argv[$i + 1];
                         $i++;
                     } else {
-                        $value = isset($out[$key]) ? $out[$key] : true;
+                        $value = $out[$key] ?? true;
                     }
 
                     $out[$key] = $value;
@@ -396,7 +332,7 @@ class Console
                     $value     = substr($arg, $eqPos + 1);
                     $out[$key] = $value;
                 }
-            } elseif (0 === strpos($arg, '-')) {
+            } elseif (str_starts_with($arg, '-')) {
                 // -k=value -abc
 
                 // -k=value
@@ -429,6 +365,6 @@ class Console
     }
 }
 
-class CommandArgsException extends \RuntimeException
+class CommandArgsException extends RuntimeException
 {
 }
