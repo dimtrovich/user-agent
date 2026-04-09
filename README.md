@@ -1,19 +1,15 @@
-Agent
+UserAgent
 =====
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/asika32764/agent/ci.yml?style=for-the-badge)
-[![Packagist Version](https://img.shields.io/packagist/v/asika/agent?style=for-the-badge)
-](https://packagist.org/packages/asika/agent)
-[![Packagist Downloads](https://img.shields.io/packagist/dt/asika/agent?style=for-the-badge)](https://packagist.org/packages/asika/agent)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/dimtrovich/user-agent/ci.yml?style=for-the-badge)
+[![Packagist Version](https://img.shields.io/packagist/v/dimtrovich/user-agent?style=for-the-badge)
+](https://packagist.org/packages/dimtrovich/user-agent)
+[![Packagist Downloads](https://img.shields.io/packagist/dt/dimtrovich/user-agent?style=for-the-badge)](https://packagist.org/packages/dimtrovich/user-agent)
 
-A PHP desktop/mobile user agent parser with support for Laravel, based on [Mobile Detect](https://github.com/serbanghita/Mobile-Detect) with desktop support and additional functionality.
+A PHP desktop/mobile user agent parser with bot detection, based on [Mobile Detect](https://github.com/serbanghita/Mobile-Detect) and [CrawlerDetect](https://github.com/JayBizzle/Crawler-Detect) with desktop support and additional functionality.
 
 > [!note]
 > This is a modified version of [jenssegers/agent](https://github.com/jenssegers/agent) to support PHP 8.0 up and MobileDetect 4.x.
-
-> [!important]
-> This fork is for B/C purpose.
-> If you need a long-term support, please try https://github.com/hisorange/browser-detect
 
 <p align="center">
 <img src="https://jenssegers.com/static/media/agent.png" height="275">
@@ -25,7 +21,7 @@ Installation
 Install using composer:
 
 ```bash
-composer require asika/agent
+composer require dimtrovich/user-agent
 ```
 
 Laravel (optional)
@@ -34,13 +30,13 @@ Laravel (optional)
 Add the service provider in `config/app.php`:
 
 ```php
-Asika\Agent\AgentServiceProvider::class,
+Dimtrovich\UserAgent\AgentServiceProvider::class,
 ```
 
 And add the Agent alias to `config/app.php`:
 
 ```php
-'Agent' => Asika\Agent\Facades\Agent::class,
+'Agent' => Dimtrovich\UserAgent\Facades\Agent::class,
 ```
 
 Basic Usage
@@ -49,7 +45,7 @@ Basic Usage
 Start by creating an `Agent` instance (or use the `Agent` Facade if you are using Laravel):
 
 ```php
-use Asika\Agent\Agent;
+use Dimtrovich\UserAgent\Agent;
 
 $agent = new Agent();
 ```
