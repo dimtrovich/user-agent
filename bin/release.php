@@ -36,7 +36,7 @@ class Build extends Console
      *
      * @since  __DEPLOY_VERSION__
      */
-    protected function doExecute()
+    protected function doExecute(): mixed
     {
         $currentVersion = trim(file_get_contents(__DIR__ . '/../VERSION'));
         $targetVersion  = $this->getArgument(0);

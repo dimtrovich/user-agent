@@ -24,12 +24,12 @@ class AgentProvider extends AbstractProvider
     public static function definitions(): array
     {
         return [
-            Agent::class => static fn(ContainerInterface $container) => new Agent(
+            Agent::class => static fn (ContainerInterface $container) => new Agent(
                 $container->get('request')->server(),
                 $container->get('request')->header('User-Agent'),
                 $container->get(CacheInterface::class),
             ),
-            'agent'      => static fn (ContainerInterface $container) => $container->get(Agent::class),
-        ];    
+            'agent' => static fn (ContainerInterface $container) => $container->get(Agent::class),
+        ];
     }
 }

@@ -95,7 +95,6 @@ class Agent extends MobileDetect implements Stringable
     ];
 
     protected static CrawlerDetect $crawlerDetect;
-
     protected ?array $temporaryHttpHeaders = null;
 
     public function __construct(
@@ -412,7 +411,7 @@ class Agent extends MobileDetect implements Stringable
                 preg_match(sprintf('#%s#is', $propertyPattern), $this->userAgent, $match);
 
                 if (false === empty($match[1])) {
-                    return ($type === self::VERSION_TYPE_FLOAT ? $this->prepareVersionNo($match[1]) : $match[1]);
+                    return $type === self::VERSION_TYPE_FLOAT ? $this->prepareVersionNo($match[1]) : $match[1];
                 }
             }
         }
