@@ -19,19 +19,33 @@
         }
     ],
     "require": {
-        "php": ">=8.0",
+        "php": "^8.1",
         "mobiledetect/mobiledetectlib": "^4.8",
         "jaybizzle/crawler-detect": "^1.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^9||^10||^11",
         "php-coveralls/php-coveralls": "^2.1",
-        "blitz-php/coding-standard": "*"
+        "blitz-php/coding-standard": "^1.6"
     },
     "autoload": {
         "psr-4": {
             "Dimtrovich\\UserAgent\\": "src/"
         }
+    },
+    "scripts": {
+        "cs": [
+            "Composer\\Config::disableProcessTimeout",
+            "php-cs-fixer fix --ansi --verbose --dry-run --diff"
+        ],
+        "cs:fix": [
+            "Composer\\Config::disableProcessTimeout",
+            "php-cs-fixer fix --ansi --verbose --diff"
+        ]
+    },
+    "scripts-descriptions": {
+        "cs": "Check PHP code style",
+        "cs:fix": "Fix PHP code style"
     },
     "extra": {
         "laravel": {
@@ -42,5 +56,9 @@
                 "UserAgent": "Dimtrovich\\UserAgent\\Facades\\UserAgent"
             }
         }
+    },
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
     }
 }
