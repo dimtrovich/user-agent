@@ -9,10 +9,13 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Dimtrovich\UserAgent\Facades;
+namespace Dimtrovich\UserAgent\Extensions\Laravel\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @mixin \Dimtrovich\UserAgent\Agent
+ */
 class Agent extends Facade
 {
     /**

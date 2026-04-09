@@ -9,8 +9,9 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Dimtrovich\UserAgent;
+namespace Dimtrovich\UserAgent\Extensions\Laravel;
 
+use Dimtrovich\UserAgent\Agent;
 use Illuminate\Support\ServiceProvider;
 
 class AgentServiceProvider extends ServiceProvider

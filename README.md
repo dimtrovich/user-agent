@@ -30,13 +30,28 @@ Laravel (optional)
 Add the service provider in `config/app.php`:
 
 ```php
-Dimtrovich\UserAgent\AgentServiceProvider::class,
+Dimtrovich\UserAgent\Extensions\Laravel\AgentServiceProvider::class,
 ```
 
 And add the Agent alias to `config/app.php`:
 
 ```php
-'Agent' => Dimtrovich\UserAgent\Facades\Agent::class,
+'Agent' => Dimtrovich\UserAgent\Extensions\Laravel\Facades\Agent::class,
+```
+
+BlitzPHP (optional)
+------------------
+
+Add the service provider in `config/app.php`:
+
+```php
+Dimtrovich\UserAgent\Extensions\BlitzPHP\AgentProvider::class,
+```
+
+And add the Agent alias to `config/app.php`:
+
+```php
+'Agent' => Dimtrovich\UserAgent\Extensions\BlitzPHP\Facades\Agent::class,
 ```
 
 Basic Usage
@@ -183,7 +198,7 @@ $version = $agent->version($platform);
 
 ## License
 
-Laravel User Agent is licensed under [The MIT License (MIT)](LICENSE).
+This is licensed under [The MIT License (MIT)](LICENSE).
 
 ## Security contact information
 
