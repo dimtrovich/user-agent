@@ -33,25 +33,25 @@ Add the service provider in `config/app.php`:
 Dimtrovich\UserAgent\Extensions\Laravel\AgentServiceProvider::class,
 ```
 
-And add the Agent alias to `config/app.php`:
+And add the UserAgent alias to `config/app.php`:
 
 ```php
-'Agent' => Dimtrovich\UserAgent\Extensions\Laravel\Facades\Agent::class,
+'UserAgent' => Dimtrovich\UserAgent\Extensions\Laravel\Facades\Agent::class,
 ```
 
 BlitzPHP (optional)
 ------------------
 
-Add the service provider in `config/app.php`:
+Add the service provider in `app/Config/app.php`:
 
 ```php
 Dimtrovich\UserAgent\Extensions\BlitzPHP\AgentProvider::class,
 ```
 
-And add the Agent alias to `config/app.php`:
+And add the UserAgent alias to `app/Config/app.php`:
 
 ```php
-'Agent' => Dimtrovich\UserAgent\Extensions\BlitzPHP\Facades\Agent::class,
+'UserAgent' => Dimtrovich\UserAgent\Extensions\BlitzPHP\Facades\Agent::class,
 ```
 
 Basic Usage

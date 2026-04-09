@@ -29,7 +29,7 @@ class AgentProvider extends AbstractProvider
                 $container->get('request')->header('User-Agent'),
                 $container->get(CacheInterface::class),
             ),
-            'agent' => static fn (ContainerInterface $container) => $container->get(Agent::class),
+            'userAgent' => static fn (ContainerInterface $container) => $container->get(Agent::class),
         ];
     }
 }

@@ -28,9 +28,9 @@ class AgentServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('agent', static fn ($app) => new Agent($app['request']->server()));
+        $this->app->singleton('userAgent', static fn ($app) => new Agent($app['request']->server()));
 
-        $this->app->alias('agent', Agent::class);
+        $this->app->alias('userAgent', Agent::class);
     }
 
     /**
@@ -40,6 +40,6 @@ class AgentServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['agent', Agent::class];
+        return ['userAgent', Agent::class];
     }
 }

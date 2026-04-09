@@ -25,6 +25,6 @@ class Agent extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'agent';
+        return 'userAgent';
     }
 }

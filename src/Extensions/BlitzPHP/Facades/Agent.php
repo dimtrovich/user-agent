@@ -20,6 +20,6 @@ final class Agent extends Facade
 {
     protected static function accessor(): string
     {
-        return 'agent';
+        return 'userAgent';
     }
 }
