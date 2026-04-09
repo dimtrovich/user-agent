@@ -16,8 +16,9 @@ use Detection\Exception\MobileDetectException;
 use Detection\MobileDetect;
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Psr\SimpleCache\CacheInterface;
+use Stringable;
 
-class Agent extends MobileDetect
+class Agent extends MobileDetect implements Stringable
 {
     /**
      * A type for the version() method indicating a string return value.
@@ -235,6 +236,9 @@ class Agent extends MobileDetect
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function match(string $regex, ?string $userAgent = null): bool
     {
         $userAgent ??= $this->userAgent;
@@ -335,13 +339,13 @@ class Agent extends MobileDetect
     /**
      * Get the robot name.
      */
-    public function robot(?string $userAgent = null): bool|string
+    public function robot(?string $userAgent = null): ?string
     {
-        if ($this->getCrawlerDetect()->isCrawler($userAgent ?: $this->userAgent)) {
+        if ($this->isRobot($userAgent)) {
             return ucfirst($this->getCrawlerDetect()->getMatches());
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -414,6 +418,11 @@ class Agent extends MobileDetect
         }
 
         return false;
+    }
+
+    public function __toString()
+    {
+        return $this->getUserAgent() ?? '';
     }
 
     /**
