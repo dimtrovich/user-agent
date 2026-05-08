@@ -21,16 +21,6 @@ use Stringable;
 class Agent extends MobileDetect implements Stringable
 {
     /**
-     * A type for the version() method indicating a string return value.
-     */
-    protected const VERSION_TYPE_STRING = 'text';
-
-    /**
-     * A type for the version() method indicating a float return value.
-     */
-    protected const VERSION_TYPE_FLOAT = 'float';
-
-    /**
      * List of desktop devices.
      */
     protected static array $desktopDevices = [
@@ -419,7 +409,7 @@ class Agent extends MobileDetect implements Stringable
         return false;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getUserAgent() ?? '';
     }
